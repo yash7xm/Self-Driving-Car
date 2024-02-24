@@ -9,7 +9,7 @@ const ctx = canvas.getContext("2d");
 animate();
 
 function animate() {
-  car.update();
+  car.update(road.borders);
 
   canvas.height = window.innerHeight;
 
