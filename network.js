@@ -48,7 +48,7 @@ class Level {
 
     for (let i = 0; i < level.outputs.length; i++) {
       let sum = 0;
-      for (let j = 0; j < level.inputs; j++) {
+      for (let j = 0; j < level.inputs.length; j++) {
         sum += level.inputs[j] * level.weights[j][i];
       }
 

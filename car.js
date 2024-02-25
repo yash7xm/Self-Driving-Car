@@ -10,7 +10,7 @@ class Car {
     this.maxSpeed = maxSpeed;
     this.friction = 0.05;
     this.angle = 0;
-    this.damage = false;
+    this.damaged = false;
 
     this.useBrain = controlType == "AI";
 
@@ -29,12 +29,12 @@ class Car {
     }
     if (this.sensor) {
       this.sensor.update(roadBorders, traffic);
-      const offsets = this.sensor.readings.map(
-        s => s == null ? 0 : 1-s.offset
-      )
+      const offsets = this.sensor.readings.map((s) =>
+        s == null ? 0 : 1 - s.offset
+      );
       const outputs = NeuralNetwork.feedForward(offsets, this.brain);
 
-      if(this.useBrain) {
+      if (this.useBrain) {
         this.controls.forward = outputs[0];
         this.controls.left = outputs[1];
         this.controls.right = outputs[2];
@@ -49,12 +49,12 @@ class Car {
         return true;
       }
     }
-
     for (let i = 0; i < traffic.length; i++) {
       if (polysIntersect(this.polygon, traffic[i].polygon)) {
         return true;
       }
     }
+    return false;
   }
 
   #createPolygon() {
@@ -77,7 +77,6 @@ class Car {
       x: this.x - Math.sin(Math.PI + this.angle + alpha) * rad,
       y: this.y - Math.cos(Math.PI + this.angle + alpha) * rad,
     });
-
     return points;
   }
 
@@ -92,7 +91,6 @@ class Car {
     if (this.speed > this.maxSpeed) {
       this.speed = this.maxSpeed;
     }
-
     if (this.speed < -this.maxSpeed / 2) {
       this.speed = -this.maxSpeed / 2;
     }
@@ -100,11 +98,9 @@ class Car {
     if (this.speed > 0) {
       this.speed -= this.friction;
     }
-
     if (this.speed < 0) {
       this.speed += this.friction;
     }
-
     if (Math.abs(this.speed) < this.friction) {
       this.speed = 0;
     }
@@ -125,13 +121,13 @@ class Car {
 
   draw(ctx, color) {
     if (this.damaged) {
-      ctx.fillStyle = "grey";
+      ctx.fillStyle = "gray";
     } else {
       ctx.fillStyle = color;
     }
     ctx.beginPath();
     ctx.moveTo(this.polygon[0].x, this.polygon[0].y);
-    for (let i = 0; i < this.polygon.length; i++) {
+    for (let i = 1; i < this.polygon.length; i++) {
       ctx.lineTo(this.polygon[i].x, this.polygon[i].y);
     }
     ctx.fill();
